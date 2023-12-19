@@ -3,7 +3,6 @@ from faker import Faker
 fake = Faker()
 
 class BaseContact:
-
     def __init__(self, first_name, last_name, phone=None, email=None):
         self.first_name = first_name
         self.last_name = last_name
@@ -19,7 +18,6 @@ class BaseContact:
         return len(f"{self.first_name} {self.last_name}")
 
 class BusinessContact(BaseContact):
-
     def __init__(self, first_name, last_name, job_title=None, company=None, business_phone=None, **kwargs):
         super().__init__(first_name, last_name, **kwargs)
         self.job_title = job_title or fake.job()

@@ -1,39 +1,53 @@
 from faker import Faker
 
 class BaseContact:
-    def __init__(self, first_name=None, last_name=None, phone=None, email=None, faker_instance=None):
-        self._faker = faker_instance or Faker()
-        self._first_name = first_name or self._faker.first_name()
-        self._last_name = last_name or self._faker.last_name()
-        self._phone = phone or "+48" + self._faker.numerify('#########')
-        self._email = email or self._faker.email()
+    def __init__(self, first_name, last_name, phone, email):
+        self.first_name = first_name
+        self.last_name = last_name
+        self.phone = phone
+        self.email = email
 
     def contact(self):
-        return f"Wybieram numer {self._phone} i dzwonię do {self._first_name} {self._last_name}"
+        return f"Wybieram numer {self.phone} i dzwonię do {self.first_name} {self.last_name}"
 
     @property
-    def label_length(self):
-        return len(f"{self._first_name} {self._last_name}")
+    def _label_length(self):
+        return len(f"{self.first_name} {self.last_name}")
 
 class BusinessContact(BaseContact):
-    def __init__(self, first_name=None, last_name=None, job_title=None, company=None, business_phone=None, faker_instance=None, **kwargs):
-        super().__init__(first_name, last_name, faker_instance=faker_instance, **kwargs)
-        self._job_title = job_title or self._faker.job()
-        self._company = company or self._faker.company()
-        self._business_phone = business_phone or "+48" + self._faker.numerify('#########')
+    def __init__(self, first_name, last_name, phone, email, job_title, company, business_phone):
+        super().__init__(first_name, last_name, phone, email)
+        self.job_title = job_title
+        self.company = company
+        self.business_phone = business_phone
 
     def contact(self):
-        return f"Wybieram numer {self._business_phone} i dzwonię do {self._first_name} {self._last_name} z {self._company}"
+        return f"Wybieram numer {self.business_phone} i dzwonię do {self.first_name} {self.last_name} z {self.company}"
+
+    @property
+    def _label_length(self):
+        return len(f"{self.first_name} {self.last_name}")
 
     @property
     def label_length(self):
-        return len(f"{self._first_name} {self._last_name}")
+        return self._label_length
 
-def create_contacts(contact_type, quantity, faker_instance=None):
-    fake = faker_instance or Faker()
+def create_contacts(contact_type, quantity):
     contacts = []
+    fake = Faker('pl_PL')
     for _ in range(quantity):
-        contacts.append(contact_type(faker_instance=fake))
+        first_name = fake.first_name()
+        last_name = fake.last_name()
+        email = fake.email()
+        phone_number = fake.phone_number()
+
+        if contact_type == BaseContact:
+            contacts.append(contact_type(first_name, last_name, phone_number, email))
+        elif contact_type == BusinessContact:
+            company = fake.company()
+            business_phone = "+48" + fake.numerify('#########')
+            job_title = fake.job()
+            contacts.append(contact_type(first_name, last_name, phone_number, email, job_title, company, business_phone))
 
     return contacts
 
@@ -43,7 +57,7 @@ if __name__ == "__main__":
 
     for contact in base_contacts:
         print(contact.contact())
-        print(f"Label length: {contact.label_length}")
+        print(f"Label length: {contact._label_length}")
 
     for contact in business_contacts:
         print(contact.contact())

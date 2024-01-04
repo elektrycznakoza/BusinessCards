@@ -49,13 +49,6 @@ def create_contacts(contact_type, quantity):
             business_phone = "+48" + fake.numerify('#########')
             job_title = fake.job()
             contacts.append(contact_type(job_title, company, business_phone, first_name, last_name, phone_number, email))
-
-        # elif contact_type == BusinessContact:
-        #     company = fake.company()
-        #     business_phone = "+48" + fake.numerify('#########')
-        #     job_title = fake.job()
-        #     contacts.append(contact_type(first_name, last_name, phone_number, email, job_title, company, business_phone))
-
     return contacts
 
 if __name__ == "__main__":

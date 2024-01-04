@@ -15,8 +15,8 @@ class BaseContact:
         return len(f"{self.first_name} {self.last_name}")
 
 class BusinessContact(BaseContact):
-    def __init__(self, first_name, last_name, phone, email, job_title, company, business_phone):
-        super().__init__(first_name, last_name, phone, email)
+    def __init__(self, job_title, company, business_phone, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.job_title = job_title
         self.company = company
         self.business_phone = business_phone
@@ -43,11 +43,18 @@ def create_contacts(contact_type, quantity):
 
         if contact_type == BaseContact:
             contacts.append(contact_type(first_name, last_name, phone_number, email))
+
         elif contact_type == BusinessContact:
             company = fake.company()
             business_phone = "+48" + fake.numerify('#########')
             job_title = fake.job()
-            contacts.append(contact_type(first_name, last_name, phone_number, email, job_title, company, business_phone))
+            contacts.append(contact_type(job_title, company, business_phone, first_name, last_name, phone_number, email))
+
+        # elif contact_type == BusinessContact:
+        #     company = fake.company()
+        #     business_phone = "+48" + fake.numerify('#########')
+        #     job_title = fake.job()
+        #     contacts.append(contact_type(first_name, last_name, phone_number, email, job_title, company, business_phone))
 
     return contacts
 

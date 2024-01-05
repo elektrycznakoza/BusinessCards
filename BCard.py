@@ -6,13 +6,14 @@ class BaseContact:
         self.last_name = last_name
         self.phone = phone
         self.email = email
+        self._label_length = len(f"{self.first_name} {self.last_name}")
 
     def contact(self):
         return f"Wybieram numer {self.phone} i dzwonię do {self.first_name} {self.last_name}"
 
     @property
-    def _label_length(self):
-        return len(f"{self.first_name} {self.last_name}")
+    def label_length(self):
+        return self._label_length
 
 class BusinessContact(BaseContact):
     def __init__(self, job_title, company, business_phone, *args, **kwargs):
@@ -23,10 +24,6 @@ class BusinessContact(BaseContact):
 
     def contact(self):
         return f"Wybieram numer {self.business_phone} i dzwonię do {self.first_name} {self.last_name} z {self.company}"
-
-    @property
-    def _label_length(self):
-        return len(f"{self.first_name} {self.last_name}")
 
     @property
     def label_length(self):
@@ -57,7 +54,7 @@ if __name__ == "__main__":
 
     for contact in base_contacts:
         print(contact.contact())
-        print(f"Label length: {contact._label_length}")
+        print(f"Label length: {contact.label_length}")
 
     for contact in business_contacts:
         print(contact.contact())

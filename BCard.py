@@ -25,10 +25,6 @@ class BusinessContact(BaseContact):
     def contact(self):
         return f"Wybieram numer {self.business_phone} i dzwonię do {self.first_name} {self.last_name} z {self.company}"
 
-    @property
-    def label_length(self):
-        return self._label_length
-
 def create_contacts(contact_type, quantity):
     contacts = []
     fake = Faker('pl_PL')
